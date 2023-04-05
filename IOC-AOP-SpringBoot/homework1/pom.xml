@@ -23,8 +23,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <version>1.18.24</version>
         </dependency>
         <dependency>
             <groupId>net.sf.opencsv</groupId>
@@ -81,7 +80,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>Application</mainClass>
+                            <mainClass>ru.otus.homework.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

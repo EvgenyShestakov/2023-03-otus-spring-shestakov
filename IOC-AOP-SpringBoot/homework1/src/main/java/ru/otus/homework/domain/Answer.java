@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Option {
+public class Answer {
+    private int possibleAnswer;
+
     private String description;
 
     private boolean correct;

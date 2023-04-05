@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +13,9 @@ import java.util.Map;
 public class Question {
     private String description;
 
-    private Map<String, Option> options = new HashMap<>();
+    private List<Answer> answers = new ArrayList<>();
+
+    public void addAnswer(Answer possibleAnswer) {
+        answers.add(possibleAnswer);
+    }
 }

@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface QuestionDao {
     List<Question> findAll();
-
-    void saveAll(List<Question> questions);
 }

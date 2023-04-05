@@ -1,20 +1,19 @@
 package ru.otus.homework.dao;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import ru.otus.homework.domain.Question;
+import ru.otus.homework.utils.CSVParser;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuestionDaoImpl implements QuestionDao {
-    private List<Question> questions = new ArrayList<>();
+    private CSVParser csvParser;
 
     @Override
     public List<Question> findAll() {
-        return questions;
-    }
-
-    @Override
-    public void saveAll(List<Question> questions) {
-        this.questions.addAll(questions);
+        return csvParser.parse();
     }
 }
