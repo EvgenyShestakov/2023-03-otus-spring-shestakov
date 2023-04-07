@@ -6,7 +6,7 @@ import ru.otus.homework.service.ApplicationRunner;
 public class Application {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
-        ApplicationRunner service = context.getBean(ApplicationRunner.class);
-        service.run();
+        ApplicationRunner runner = context.getBean(ApplicationRunner.class);
+        runner.run();
     }
 }

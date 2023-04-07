@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <bean id="questionDao" class="ru.otus.homework.dao.QuestionDaoImpl">
-        <constructor-arg index="0" ref="csvParser"/>
-    </bean>
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="ioService" class="ru.otus.homework.service.IOServiceStreams">
+        <constructor-arg index="0">
+            <util:constant static-field="java.lang.System.out"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <util:constant static-field="java.lang.System.in"/>
+        </constructor-arg>
     </bean>
 
-    <bean id="processorService" class="ru.otus.homework.service.ApplicationRunnerImpl">
+    <bean id="questionsCSVParser" class="ru.otus.homework.utils.QuestionsCSVParser">
+        <constructor-arg index="0" value="questions.csv"/>
+    </bean>
+
+    <bean id="questionDao" class="ru.otus.homework.dao.QuestionDaoImpl">
+        <constructor-arg index="0" ref="questionsCSVParser"/>
+    </bean>
+
+    <bean id="applicationRunnerImpl" class="ru.otus.homework.service.ApplicationRunnerImpl">
         <constructor-arg index="0" ref="questionDao"/>
         <constructor-arg index="1" ref="ioService"/>
-    </bean>
-
-    <bean id="csvParser" class="ru.otus.homework.utils.CSVParser">
     </bean>
 
 </beans>
