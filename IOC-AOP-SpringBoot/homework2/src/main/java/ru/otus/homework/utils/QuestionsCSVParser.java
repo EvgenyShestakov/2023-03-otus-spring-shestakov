@@ -1,12 +1,11 @@
 package ru.otus.homework.utils;
 
 import au.com.bytecode.opencsv.CSVReader;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.otus.homework.domain.Answer;
 import ru.otus.homework.domain.Question;
-import ru.otus.homework.exception.ParseException;
+import ru.otus.homework.exception.WhileLoadingQuestionsException;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -31,13 +30,12 @@ public class QuestionsCSVParser {
             CSVReader reader = new CSVReader(new InputStreamReader((inputStream)), ';');
             questions = readingLinesOfCSVFile(reader);
         } catch (Exception e) {
-            throw new ParseException("CSV parsing error", e);
+            throw new WhileLoadingQuestionsException("CSV parsing error", e);
         }
         return questions;
     }
 
-    @SneakyThrows
-    private List<Question> readingLinesOfCSVFile(CSVReader reader) {
+    private List<Question> readingLinesOfCSVFile(CSVReader reader) throws Exception {
         List<Question> questions = new ArrayList<>();
         String[] nextLine;
         while ((nextLine = reader.readNext()) != null) {

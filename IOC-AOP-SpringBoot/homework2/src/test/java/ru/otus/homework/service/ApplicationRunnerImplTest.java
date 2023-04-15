@@ -21,7 +21,7 @@ class ApplicationRunnerImplTest {
     private QuestionDao questionDao;
 
     @Mock
-    private IOService<Question> ioService;
+    private IOService ioService;
 
     private ApplicationRunner applicationRunner;
 
