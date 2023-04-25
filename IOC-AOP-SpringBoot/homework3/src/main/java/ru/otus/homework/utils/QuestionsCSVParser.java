@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class QuestionsCSVParser {
@@ -24,9 +23,7 @@ public class QuestionsCSVParser {
 
     public List<Question> parse() {
         List<Question> questions;
-        String questionsResourceName = Objects.equals(appProps.getLocale().getLanguage(), "ru") ?
-                appProps.getFilepathRu() : appProps.getFilepathEn();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(questionsResourceName)) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(appProps.getFilepath())) {
             if (inputStream == null) {
                 throw new FileNotFoundException("Resource not found");
             }

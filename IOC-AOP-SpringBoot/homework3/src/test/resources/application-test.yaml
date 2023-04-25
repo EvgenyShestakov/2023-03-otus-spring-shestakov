@@ -4,9 +4,8 @@ spring:
     encoding: "UTF-8"
 
 application:
-  filepath-en: "questions_en.csv"
-  filepath-ru: "questions_ru.csv"
-  test-score: 3
+  filepath: "questions.csv"
+  test-score: 0
   locale: en_En
 
 

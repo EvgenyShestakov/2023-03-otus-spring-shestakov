@@ -14,7 +14,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private final IOService ioService;
 
-    private final LocalizationService localization;
+    private final LocalizationService localizationService;
 
     private final int passingTestScore;
 
@@ -22,16 +22,18 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
                                  LocalizationService localization, AppProps appProps) {
         this.questionDao = questionDao;
         this.ioService = ioService;
-        this.localization = localization;
+        this.localizationService = localization;
         this.passingTestScore = appProps.getTestScore();
     }
 
     @Override
     public void run() {
         List<Question> questions = questionDao.findAll();
-        String fullName = ioService.readStringWithPrompt(localization.enterYourName());
+        String fullName = ioService.readStringWithPrompt(localizationService.
+                getLocalizationMessage("enter.your.fullName"));
         int testingResult = testing(questions);
-        ioService.outputString(formResult(fullName, testingResult));
+        String result = formResult(fullName, testingResult);
+        ioService.outputString(result);
     }
 
     private int testing(List<Question> questions) {
@@ -41,13 +43,14 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
             Question question = questions.get(index);
             displayQuestion(question);
             int answerIndex = ioService.readIntWithPrompt(question.getAnswers().size(),
-                    localization.selectAnswer());
+                    localizationService.getLocalizationMessage("select.an.answer.with.a.number"));
             if (answerIndex != -1) {
                 Answer answer = question.getAnswers().get(answerIndex);
                 count = answer.isCorrect() ? count + 1 : count;
                 index++;
             } else {
-                ioService.outputString(localization.goOutOfRange());
+                ioService.outputString(localizationService.
+                        getLocalizationMessage("entered.value.is.outside"));
             }
             ioService.outputString("");
         }
@@ -56,7 +59,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private void displayQuestion(Question question) {
         ioService.outputString(question.getDescription());
-        ioService.outputString(localization.selectAnswer());
+        ioService.outputString(localizationService.
+                getLocalizationMessage("select.an.answer.with.a.number"));
         question.getAnswers().stream().
                 map(answer -> String.format("%s. %s", answer.getPossibleAnswer(),
                         answer.getDescription())).forEach(ioService::outputString);
@@ -64,8 +68,9 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     }
 
     private String formResult(String fullName, int testingResult) {
-        return testingResult >= passingTestScore ? localization.
-                testPassed(fullName, testingResult) : localization.testFailed(fullName, testingResult);
+        return testingResult >= passingTestScore ? localizationService.
+                getLocalizationMessage("test.passed", fullName, testingResult) : localizationService.
+                getLocalizationMessage("test.failed", fullName, testingResult);
     }
 }
 

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.support.DelegatingMessageSource;
 import ru.otus.homework.config.AppProps;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.domain.Answer;
@@ -25,16 +24,16 @@ class ApplicationRunnerImplTest {
     @Mock
     private IOService ioService;
 
-    @Mock
     private AppProps appProps = new AppProps();
 
     @Mock
-    private LocalizationService localization = new LocalizationServiceImpl(appProps, new DelegatingMessageSource());
+    private LocalizationService localization;
 
     private ApplicationRunner applicationRunner;
 
     @BeforeEach
     void setUp() {
+        appProps.setTestScore(1);
         applicationRunner = new ApplicationRunnerImpl(questionDao, ioService, localization, appProps);
     }
 
@@ -44,9 +43,9 @@ class ApplicationRunnerImplTest {
                 new Question("What color is the sky?", List.of(
                         new Answer(1, "blue", true),
                         new Answer(2, "red", false))));
-        given(localization.enterYourName()).willReturn("Enter your fullName: ");
-        given(localization.selectAnswer()).willReturn("Select an answer with a number: ");
-        given(localization.testPassed("John Connor", 1)).willReturn("John Connor - test passed, grade 1");
+        given(localization.getLocalizationMessage("enter.your.fullName")).willReturn("Enter your fullName: ");
+        given(localization.getLocalizationMessage("select.an.answer.with.a.number")).willReturn("Select an answer with a number: ");
+        given(localization.getLocalizationMessage("test.passed","John Connor", 1)).willReturn("John Connor - test passed, grade 1");
         given(ioService.readStringWithPrompt(anyString())).willReturn("John Connor");
         given(questionDao.findAll()).willReturn(questions);
         applicationRunner.run();
@@ -59,9 +58,9 @@ class ApplicationRunnerImplTest {
                 new Question("What is the capital of France?", List.
                         of(new Answer(1, "London", false),
                                 new Answer(2, "Paris", true))));
-        given(localization.enterYourName()).willReturn("Enter your fullName: ");
-        given(localization.selectAnswer()).willReturn("Select an answer with a number: ");
-        given(localization.testPassed("John Connor", 0)).willReturn("John Connor - test failed, grade 0");
+        given(localization.getLocalizationMessage("enter.your.fullName")).willReturn("Enter your fullName: ");
+        given(localization.getLocalizationMessage("select.an.answer.with.a.number")).willReturn("Select an answer with a number: ");
+        given(localization.getLocalizationMessage("test.failed","John Connor", 0)).willReturn("John Connor - test failed, grade 0");
         given(ioService.readStringWithPrompt(anyString())).willReturn("John Connor");
         given(questionDao.findAll()).willReturn(questions);
         applicationRunner.run();
