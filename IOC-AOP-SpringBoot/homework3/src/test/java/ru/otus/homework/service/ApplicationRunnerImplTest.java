@@ -1,8 +1,8 @@
 package ru.otus.homework.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.homework.config.AppProps;
@@ -24,18 +24,14 @@ class ApplicationRunnerImplTest {
     @Mock
     private IOService ioService;
 
-    private AppProps appProps = new AppProps();
-
     @Mock
     private LocalizationService localization;
 
-    private ApplicationRunner applicationRunner;
+    @Mock
+    private AppProps appProps;
 
-    @BeforeEach
-    void setUp() {
-        appProps.setTestScore(1);
-        applicationRunner = new ApplicationRunnerImpl(questionDao, ioService, localization, appProps);
-    }
+    @InjectMocks
+    private ApplicationRunnerImpl applicationRunner;
 
     @Test
     void testPassed() {
@@ -58,6 +54,7 @@ class ApplicationRunnerImplTest {
                 new Question("What is the capital of France?", List.
                         of(new Answer(1, "London", false),
                                 new Answer(2, "Paris", true))));
+        given(appProps.getTestScore()).willReturn(1);
         given(localization.getLocalizationMessage("enter.your.fullName")).willReturn("Enter your fullName: ");
         given(localization.getLocalizationMessage("select.an.answer.with.a.number")).willReturn("Select an answer with a number: ");
         given(localization.getLocalizationMessage("test.failed","John Connor", 0)).willReturn("John Connor - test failed, grade 0");

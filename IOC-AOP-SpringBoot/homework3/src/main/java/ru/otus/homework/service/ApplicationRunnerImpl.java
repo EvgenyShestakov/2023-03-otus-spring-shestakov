@@ -16,14 +16,14 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private final LocalizationService localizationService;
 
-    private final int passingTestScore;
+    private final AppProps appProps;
 
     public ApplicationRunnerImpl(QuestionDao questionDao, IOService ioService,
                                  LocalizationService localization, AppProps appProps) {
         this.questionDao = questionDao;
         this.ioService = ioService;
         this.localizationService = localization;
-        this.passingTestScore = appProps.getTestScore();
+        this.appProps = appProps;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     }
 
     private String formResult(String fullName, int testingResult) {
-        return testingResult >= passingTestScore ? localizationService.
+        return testingResult >= appProps.getTestScore() ? localizationService.
                 getLocalizationMessage("test.passed", fullName, testingResult) : localizationService.
                 getLocalizationMessage("test.failed", fullName, testingResult);
     }
