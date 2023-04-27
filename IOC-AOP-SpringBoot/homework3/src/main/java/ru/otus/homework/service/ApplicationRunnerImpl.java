@@ -1,14 +1,16 @@
 package ru.otus.homework.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.homework.config.AppProps;
 import ru.otus.homework.dao.QuestionDao;
 import ru.otus.homework.domain.Answer;
 import ru.otus.homework.domain.Question;
+import ru.otus.homework.provider.TestScoreProvider;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ApplicationRunnerImpl implements ApplicationRunner {
     private final QuestionDao questionDao;
 
@@ -16,15 +18,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private final LocalizationService localizationService;
 
-    private final AppProps appProps;
-
-    public ApplicationRunnerImpl(QuestionDao questionDao, IOService ioService,
-                                 LocalizationService localization, AppProps appProps) {
-        this.questionDao = questionDao;
-        this.ioService = ioService;
-        this.localizationService = localization;
-        this.appProps = appProps;
-    }
+    private final TestScoreProvider testScoreProvider;
 
     @Override
     public void run() {
@@ -68,7 +62,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     }
 
     private String formResult(String fullName, int testingResult) {
-        return testingResult >= appProps.getTestScore() ? localizationService.
+        return testingResult >= testScoreProvider.getTestScore() ? localizationService.
                 getLocalizationMessage("test.passed", fullName, testingResult) : localizationService.
                 getLocalizationMessage("test.failed", fullName, testingResult);
     }

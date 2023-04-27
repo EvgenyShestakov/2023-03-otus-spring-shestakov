@@ -1,11 +1,12 @@
 package ru.otus.homework.utils;
 
 import au.com.bytecode.opencsv.CSVReader;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.otus.homework.config.AppProps;
 import ru.otus.homework.domain.Answer;
 import ru.otus.homework.domain.Question;
 import ru.otus.homework.exception.WhileLoadingQuestionsException;
+import ru.otus.homework.provider.ResourceProvider;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -14,16 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class QuestionsCSVParser {
-    private final AppProps appProps;
-
-    public QuestionsCSVParser(AppProps appProps) {
-        this.appProps = appProps;
-    }
+    private final ResourceProvider resourceProvider;
 
     public List<Question> parse() {
         List<Question> questions;
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(appProps.getFilepath())) {
+        try (InputStream inputStream = getClass().getClassLoader().
+                getResourceAsStream(resourceProvider.getResourcePath())) {
             if (inputStream == null) {
                 throw new FileNotFoundException("Resource not found");
             }
