@@ -3,12 +3,12 @@ package ru.otus.homework.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.otus.homework.provider.LocalProvider;
+import ru.otus.homework.provider.LocaleProvider;
 
 @Service
 @RequiredArgsConstructor
 public class LocalizationServiceImpl implements LocalizationService {
-    private final LocalProvider localProvider;
+    private final LocaleProvider localProvider;
 
     private final MessageSource messageSource;
 

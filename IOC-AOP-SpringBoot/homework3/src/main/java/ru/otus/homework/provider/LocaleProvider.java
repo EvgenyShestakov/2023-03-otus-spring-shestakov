@@ -2,6 +2,6 @@ package ru.otus.homework.provider;
 
 import java.util.Locale;
 
-public interface LocalProvider {
+public interface LocaleProvider {
     Locale getLocale();
 }
