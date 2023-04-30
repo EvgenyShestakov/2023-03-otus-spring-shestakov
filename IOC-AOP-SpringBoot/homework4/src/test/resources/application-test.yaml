@@ -1,0 +1,15 @@
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+
+application:
+  resource-path: "questions.csv"
+  test-score: 1
+  locale: en_En
+
+
+
+
+
+
