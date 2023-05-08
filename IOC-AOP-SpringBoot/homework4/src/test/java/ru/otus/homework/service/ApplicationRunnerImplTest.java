@@ -43,7 +43,7 @@ class ApplicationRunnerImplTest {
     private UserNameHolder userNameHolder;
 
     @Autowired
-    private ApplicationRunnerImpl applicationRunner;
+    private ApplicationRunner applicationRunner;
 
     @Test
     void testPassed() {
