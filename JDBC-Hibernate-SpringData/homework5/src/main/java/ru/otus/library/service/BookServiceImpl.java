@@ -8,6 +8,7 @@ import ru.otus.library.dao.GenreDao;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Genre;
+import ru.otus.library.util.Converter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,20 +25,17 @@ public class BookServiceImpl implements BookService {
 
     private final OutputService outputService;
 
+    private final Converter<Book> converter;
+
     @Override
     public void save(String title, LocalDate publicationDate, long authorId, long genreId) {
         Optional<Author> author = authorDao.getById(authorId);
         Optional<Genre> genre = genreDao.getById(genreId);
-        if (author.isPresent() && genre.isPresent()) {
+        if (validate(author, genre, authorId, genreId)) {
             Book book = new Book(title, publicationDate, author.get(), genre.get());
-            outputService.outputString(bookDao.save(book).toString());
-        } else {
-            if (author.isEmpty()) {
-                outputService.outputString(String.format("Author with ID = %d not found", authorId));
-            }
-            if (genre.isEmpty()) {
-                outputService.outputString(String.format("Genre with ID = %d not found", genreId));
-            }
+            bookDao.save(book);
+            String stringBook = converter.convert(book);
+            outputService.outputString(stringBook);
         }
     }
 
@@ -45,30 +43,31 @@ public class BookServiceImpl implements BookService {
     public void update(long id, String title, LocalDate publicationDate, long authorId, long genreId) {
         Optional<Author> author = authorDao.getById(authorId);
         Optional<Genre> genre = genreDao.getById(genreId);
-        if (author.isPresent() && genre.isPresent()) {
+        if (validate(author, genre, authorId, genreId)) {
             Book book = new Book(id, title, publicationDate, author.get(), genre.get());
-            outputService.outputString(String.valueOf(bookDao.update(book)));
-        } else {
-            if (author.isEmpty()) {
-                outputService.outputString(String.format("Author with ID = %d not found", authorId));
-            }
-            if (genre.isEmpty()) {
-                outputService.outputString(String.format("Genre with ID = %d not found", genreId));
-            }
+            boolean result = bookDao.update(book);
+            String stringResult = String.valueOf(result);
+            outputService.outputString(stringResult);
         }
     }
 
     @Override
     public void getById(long id) {
         Optional<Book> optionalBook = bookDao.getById(id);
-        optionalBook.ifPresentOrElse(book -> outputService.outputString(book.toString()),
+        optionalBook.ifPresentOrElse(book -> {
+                    String stringBook = converter.convert(book);
+                    outputService.outputString(stringBook);
+                },
                 () -> outputService.outputString("There is no book with this ID"));
     }
 
     @Override
     public void getAll() {
         List<Book> books = bookDao.getAll();
-        books.forEach(book -> outputService.outputString(book.toString()));
+        books.forEach(book -> {
+            String stringBook = converter.convert(book);
+            outputService.outputString(stringBook);
+        });
         if (books.isEmpty()) {
             outputService.outputString("Book list is empty");
         }
@@ -76,6 +75,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(long id) {
-        outputService.outputString(String.valueOf(bookDao.deleteById(id)));
+        boolean result = bookDao.deleteById(id);
+        String stringResult = String.valueOf(result);
+        outputService.outputString(stringResult);
+    }
+
+    private boolean validate(Optional<Author> author,
+                             Optional<Genre> genre, long authorId, long genreId) {
+        boolean isValid = author.isPresent() && genre.isPresent();
+        if (author.isEmpty()) {
+            String authorMessage = String.format("Author with ID = %d not found", authorId);
+            outputService.outputString(authorMessage);
+        }
+        if (genre.isEmpty()) {
+            String genreMessage = String.format("Genre with ID = %d not found", genreId);
+            outputService.outputString(genreMessage);
+        }
+        return isValid;
     }
 }

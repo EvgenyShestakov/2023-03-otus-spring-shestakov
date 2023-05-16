@@ -1,13 +1,39 @@
 package ru.otus.library.shell;
 
-public interface BookShellCommands {
-    void addBook(String title, String publicationDate, long authorId, long genreId);
+import lombok.RequiredArgsConstructor;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+import ru.otus.library.service.BookService;
 
-    void updateBook(long id, String title, String publicationDate, long authorId, long genreId);
+import java.time.LocalDate;
 
-    void getBookById(long id);
+@ShellComponent
+@RequiredArgsConstructor
+public class BookShellCommands {
+    private final BookService bookService;
 
-    void getAllBooks();
+    @ShellMethod(value = "Add book", key = "add-b")
+    public void addBook(String title, String publicationDate, long authorId, long genreId) {
+        bookService.save(title, LocalDate.parse(publicationDate), authorId, genreId);
+    }
 
-    void deleteBookById(long id);
+    @ShellMethod(value = "updateBook", key = "up-b")
+    public void updateBook(long id, String title, String publicationDate, long authorId, long genreId) {
+        bookService.update(id, title, LocalDate.parse(publicationDate), authorId, genreId);
+    }
+
+    @ShellMethod(value = "getBook", key = "get-b")
+    public void getBookById(long id) {
+        bookService.getById(id);
+    }
+
+    @ShellMethod(value = "getBooks", key = "get-all-b")
+    public void getAllBooks() {
+        bookService.getAll();
+    }
+
+    @ShellMethod(value = "deleteBook", key = "del-b")
+    public void deleteBookById(long id) {
+        bookService.deleteById(id);
+    }
 }

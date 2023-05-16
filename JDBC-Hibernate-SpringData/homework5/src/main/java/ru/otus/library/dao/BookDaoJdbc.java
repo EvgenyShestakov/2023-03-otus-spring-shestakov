@@ -55,8 +55,8 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public Optional<Book> getById(long id) {
         String sql = "SELECT b.id as id, b.title, b.publication_date, a.id as author_id, a.first_name," +
-                " a.last_name, a.date_of_birth, g.id as genre_id, g.genre_name FROM book b JOIN author a " +
-                "ON b.author_id = a.id JOIN genre g ON b.genre_id = g.id WHERE b.id = :id";
+                " a.last_name, a.date_of_birth, g.id as genre_id, g.genre_name FROM book b INNER JOIN author a " +
+                "ON b.author_id = a.id INNER JOIN genre g ON b.genre_id = g.id WHERE b.id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("id", id);
         List<Book> books = jdbcTemplate.query(sql, params, new BookRowMapper());
         return books.isEmpty() ? Optional.empty() : Optional.of(books.get(0));
@@ -64,8 +64,9 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> getAll() {
-        String sql = "SELECT * FROM book b JOIN author a ON b.author_id = a.id" +
-                " JOIN genre g ON b.genre_id = g.id";
+        String sql = "SELECT b.id as id, b.title, b.publication_date, a.id as author_id, a.first_name," +
+                "a.last_name, a.date_of_birth, g.id as genre_id, g.genre_name FROM book b INNER JOIN author a " +
+                "ON b.author_id = a.id INNER JOIN genre g ON b.genre_id = g.id";
         return jdbcTemplate.query(sql, new BookRowMapper());
     }
 

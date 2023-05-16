@@ -1,13 +1,37 @@
 package ru.otus.library.shell;
 
-public interface GenreShellCommands {
-    void addGenre(String genreName);
+import lombok.RequiredArgsConstructor;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+import ru.otus.library.service.GenreService;
 
-    void updateGenre(long id, String genreName);
+@ShellComponent
+@RequiredArgsConstructor
+public class GenreShellCommands {
+    private final GenreService genreService;
 
-    void getGenreById(long id);
+    @ShellMethod(value = "Add genre", key = "add-g")
+    public void addGenre(String genreName) {
+        genreService.save(genreName);
+    }
 
-    void getAllGenres();
+    @ShellMethod(value = "updateGenre", key = "up-g")
+    public void updateGenre(long id, String genreName) {
+        genreService.update(id, genreName);
+    }
 
-    void deleteGenreById(long id);
+    @ShellMethod(value = "getGenre", key = "get-g")
+    public void getGenreById(long id) {
+        genreService.getById(id);
+    }
+
+    @ShellMethod(value = "getGenres", key = "get-all-g")
+    public void getAllGenres() {
+        genreService.getAll();
+    }
+
+    @ShellMethod(value = "deleteGenre", key = "del-g")
+    public void deleteGenreById(long id) {
+        genreService.deleteById(id);
+    }
 }
