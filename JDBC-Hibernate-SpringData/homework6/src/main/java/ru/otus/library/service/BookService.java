@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface BookService {
     Book saveBook(String title, LocalDate publicationDate, long authorId, long genreId);
 
-    boolean updateBook(long id, String title, LocalDate publicationDate, long authorId, long genreId);
+    void updateBook(long id, String title, LocalDate publicationDate, long authorId, long genreId);
 
     List<Book> getBookByTitle(String title);
 
@@ -17,7 +17,7 @@ public interface BookService {
 
     List<Book> getAllBooks();
 
-    boolean deleteBookById(long id);
+    void deleteBookById(long id);
 }
 
 

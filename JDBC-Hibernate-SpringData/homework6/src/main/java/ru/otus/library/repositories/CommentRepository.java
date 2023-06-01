@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface CommentRepository {
     Comment saveComment(Comment comment);
 
-    boolean updateComment(Comment comment);
+    void updateComment(Comment comment);
 
     Optional<Comment> getCommentById(long id);
 
     List<Comment> getCommentsByBook(List<Book> book);
 
-    boolean deleteCommentById(long id);
+    void deleteCommentById(Comment comment);
 }

@@ -26,8 +26,8 @@ public class GenreShellCommands {
 
     @ShellMethod(value = "updateGenre", key = "up-g")
     public String updateGenre(long id, String genreName) {
-        boolean result = genreService.updateGenre(id, genreName);
-        return String.valueOf(result);
+        genreService.updateGenre(id, genreName);
+        return String.format("Genre with id %d updated", id);
     }
 
     @ShellMethod(value = "getGenre", key = "get-g")
@@ -53,7 +53,11 @@ public class GenreShellCommands {
 
     @ShellMethod(value = "deleteGenre", key = "del-g")
     public String deleteGenreById(long id) {
-        boolean result = genreService.deleteGenreById(id);
-        return String.valueOf(result);
+        try {
+            genreService.deleteGenreById(id);
+            return String.format("Genre with id %d deleted", id);
+        } catch (NoSuchElementException e) {
+            return String.format("Genre with id %d does not exist", id);
+        }
     }
 }

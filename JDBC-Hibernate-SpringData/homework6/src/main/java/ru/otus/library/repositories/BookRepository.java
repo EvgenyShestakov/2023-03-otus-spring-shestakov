@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface BookRepository {
     Book saveBook(Book book);
 
-    boolean updateBook(Book book);
+    void updateBook(Book book);
 
     List<Book> getBookByTitle(String bookTitle);
 
@@ -16,5 +16,5 @@ public interface BookRepository {
 
     List<Book> getAllBooks();
 
-    boolean deleteBookById(long id);
+    void deleteBookById(Book book);
 }

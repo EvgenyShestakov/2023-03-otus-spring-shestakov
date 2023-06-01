@@ -3,13 +3,12 @@ package ru.otus.library.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.library.repositories.AuthorRepository;
-import ru.otus.library.repositories.BookRepository;
-import ru.otus.library.repositories.GenreRepository;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Genre;
-import ru.otus.library.util.Converter;
+import ru.otus.library.repositories.AuthorRepository;
+import ru.otus.library.repositories.BookRepository;
+import ru.otus.library.repositories.GenreRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,8 +24,6 @@ public class BookServiceImpl implements BookService {
 
     private final GenreRepository genreRepository;
 
-    private final Converter<Book> converter;
-
     @Transactional
     @Override
     public Book saveBook(String title, LocalDate publicationDate, long authorId, long genreId)
@@ -39,12 +36,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public boolean updateBook(long id, String title, LocalDate publicationDate, long authorId, long genreId)
+    public void updateBook(long id, String title, LocalDate publicationDate, long authorId, long genreId)
             throws NoSuchElementException {
         Author author = authorRepository.getAuthorById(authorId).orElseThrow();
         Genre genre = genreRepository.getGenreById(genreId).orElseThrow();
         Book book = new Book(id, title, publicationDate, author, genre);
-        return bookRepository.updateBook(book);
+        bookRepository.updateBook(book);
     }
 
     @Transactional(readOnly = true)
@@ -67,7 +64,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public boolean deleteBookById(long id) {
-        return bookRepository.deleteBookById(id);
+    public void deleteBookById(long id) {
+        Book book = bookRepository.getBookById(id).orElseThrow();
+        bookRepository.deleteBookById(book);
     }
 }

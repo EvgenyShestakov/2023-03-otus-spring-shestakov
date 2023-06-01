@@ -20,6 +20,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = Application.class)
 class BookServiceImplTest {
@@ -64,9 +66,11 @@ class BookServiceImplTest {
 
     @Test
     void mustDeleteById() {
-        given(bookRepository.deleteBookById(1)).willReturn(true);
-        boolean result = bookService.deleteBookById(1);
-        assertTrue(result);
+        Book book = new Book(1, "Flight", LocalDate.of(1975, 1, 5),
+                new Author("John", "Smith"), new Genre("Mystic"));
+        given(bookRepository.getBookById(1)).willReturn(Optional.of(book));
+        bookService.deleteBookById(1);
+        verify(bookRepository, times(1)).deleteBookById(book);
     }
 
     @Test
@@ -117,9 +121,8 @@ class BookServiceImplTest {
         Book book = new Book(id, title, publicationDate, author, genre);
         given(authorRepository.getAuthorById(1)).willReturn(Optional.of(author));
         given(genreRepository.getGenreById(2)).willReturn(Optional.of(genre));
-        given(bookRepository.updateBook(book)).willReturn(true);
-        boolean result = bookService.updateBook(id, title, publicationDate, 1, 2);
-        assertTrue(result);
+        bookService.updateBook(id, title, publicationDate, 1, 2);
+        verify(bookRepository, times(1)).updateBook(book);
     }
 
     @Test

@@ -8,13 +8,13 @@ import java.util.Optional;
 public interface GenreRepository {
     Genre saveGenre(Genre genre);
 
-    boolean updateGenre(Genre genre);
+    void updateGenre(Genre genre);
 
     Optional<Genre> getGenreById(long id);
 
     List<Genre> getAllGenres();
 
-    boolean deleteGenreById(long id);
+    void deleteGenreById(Genre genre);
 }
 
 

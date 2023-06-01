@@ -27,8 +27,8 @@ public class AuthorShellCommands {
 
     @ShellMethod(value = "updateAuthor", key = "up-a")
     public String updateAuthor(long id, String firstName, String lastName, String dateOfBirth) {
-        boolean result = authorService.updateAuthor(id, firstName, lastName, LocalDate.parse(dateOfBirth));
-        return String.valueOf(result);
+        authorService.updateAuthor(id, firstName, lastName, LocalDate.parse(dateOfBirth));
+        return String.format("Author with id %d updated", id);
     }
 
     @ShellMethod(value = "getAuthorByName", key = "get-a-n")
@@ -64,7 +64,11 @@ public class AuthorShellCommands {
 
     @ShellMethod(value = "deleteAuthor", key = "del-a")
     public String deleteAuthorById(long id) {
-        boolean result = authorService.deleteAuthorById(id);
-        return String.valueOf(result);
+        try {
+            authorService.deleteAuthorById(id);
+            return String.format("Author with id %d deleted", id);
+        } catch (NoSuchElementException e) {
+            return String.format("Author with id %d does not exist", id);
+        }
     }
 }

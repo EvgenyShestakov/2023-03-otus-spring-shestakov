@@ -8,11 +8,11 @@ import java.util.Optional;
 public interface GenreService {
     Genre saveGenre(String genreName);
 
-    boolean updateGenre(long id, String genreName);
+    void updateGenre(long id, String genreName);
 
     Optional<Genre> getGenreById(long id);
 
     List<Genre> getAllGenres();
 
-    boolean deleteGenreById(long id);
+    void deleteGenreById(long id);
 }

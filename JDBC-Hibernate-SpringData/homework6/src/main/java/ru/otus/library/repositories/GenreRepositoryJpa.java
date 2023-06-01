@@ -2,7 +2,6 @@ package ru.otus.library.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -28,13 +27,8 @@ public class GenreRepositoryJpa implements GenreRepository {
     }
 
     @Override
-    public boolean updateGenre(Genre genre) {
-        Query query = em.
-                createQuery("update Genre g set g.genreName = :genreName where g.id = :id");
-        query.setParameter("genreName", genre.getGenreName());
-        query.setParameter("id", genre.getId());
-        int rowsAffected = query.executeUpdate();
-        return rowsAffected > 0;
+    public void updateGenre(Genre genre) {
+        em.merge(genre);
     }
 
     @Override
@@ -49,10 +43,7 @@ public class GenreRepositoryJpa implements GenreRepository {
     }
 
     @Override
-    public boolean deleteGenreById(long id) {
-        Query query = em.createQuery("delete from Genre g where g.id = :id");
-        query.setParameter("id", id);
-        int rowsAffected = query.executeUpdate();
-        return rowsAffected > 0;
+    public void deleteGenreById(Genre genre) {
+        em.remove(genre);
     }
 }

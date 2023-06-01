@@ -7,7 +7,6 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.repositories.BookRepository;
 import ru.otus.library.repositories.CommentRepository;
-import ru.otus.library.util.Converter;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,8 +19,6 @@ public class CommentServiceImpl implements CommentService {
 
     private final BookRepository bookRepository;
 
-    private final Converter<Comment> converter;
-
     @Transactional
     @Override
     public Comment saveComment(String body, long bookId) throws NoSuchElementException {
@@ -32,10 +29,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public boolean updateComment(long id, String body, long bookId) throws NoSuchElementException {
+    public void updateComment(long id, String body, long bookId) throws NoSuchElementException {
         Book book = bookRepository.getBookById(bookId).orElseThrow();
         Comment comment = new Comment(id, body, book);
-        return commentRepository.updateComment(comment);
+        commentRepository.updateComment(comment);
     }
 
     @Transactional(readOnly = true)
@@ -53,7 +50,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public boolean deleteCommentById(long id) {
-        return commentRepository.deleteCommentById(id);
+    public void deleteCommentById(long id) {
+        Comment comment = commentRepository.getCommentById(id).orElseThrow();
+        commentRepository.deleteCommentById(comment);
     }
 }

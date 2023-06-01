@@ -10,9 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -34,9 +36,13 @@ public class Book {
     @Column(name = "publication_date")
     private LocalDate publicationDate;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(targetEntity = Author.class, fetch = FetchType.LAZY)
     private Author author;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(targetEntity = Genre.class, fetch = FetchType.LAZY)
     private Genre genre;
 

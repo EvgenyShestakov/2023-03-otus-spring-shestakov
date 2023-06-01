@@ -1,14 +1,14 @@
 package ru.otus.library.repositories;
 
-import jakarta.persistence.TypedQuery;
 import jakarta.persistence.EntityGraph;
-import jakarta.persistence.Query;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.otus.library.domain.Book;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +29,8 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public boolean updateBook(Book book) {
-        Query query = em.createQuery("update Book b set b.title = :title where b.id = :id");
-        query.setParameter("title", book.getTitle());
-        query.setParameter("id", book.getId());
-        int rowsAffected = query.executeUpdate();
-        return rowsAffected > 0;
+    public void updateBook(Book book) {
+        em.merge(book);
     }
 
     @Override
@@ -49,11 +45,8 @@ public class BookRepositoryJpa implements BookRepository {
     @Override
     public Optional<Book> getBookById(long id) {
         EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre-entity-graph");
-        TypedQuery<Book> query = em.createQuery("select b from Book b where b.id = :id", Book.class);
-        query.setParameter("id", id);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
-        List<Book> books = query.getResultList();
-        return books.isEmpty() ? Optional.empty() : Optional.of(books.get(0));
+        return Optional.ofNullable(em.find(Book.class, id,
+                Collections.singletonMap("javax.persistence.fetchgraph", entityGraph)));
     }
 
     @Override
@@ -65,10 +58,7 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public boolean deleteBookById(long id) {
-        Query query = em.createQuery("delete from Book b where b.id = :id");
-        query.setParameter("id", id);
-        int rowsAffected = query.executeUpdate();
-        return rowsAffected > 0;
+    public void deleteBookById(Book book) {
+        em.remove(book);
     }
 }

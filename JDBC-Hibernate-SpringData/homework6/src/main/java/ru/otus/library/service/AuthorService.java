@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface AuthorService {
     Author saveAuthor(String firstName, String lastName, LocalDate dateOfBirth);
 
-    boolean updateAuthor(long id, String firstName, String lastName, LocalDate dateOfBirth);
+    void updateAuthor(long id, String firstName, String lastName, LocalDate dateOfBirth);
 
     List<Author> getAuthorByName(String firstName, String lastName);
 
@@ -17,5 +17,5 @@ public interface AuthorService {
 
     List<Author> getAllAuthors();
 
-    boolean deleteAuthorById(long id);
+    void deleteAuthorById(long id);
 }

@@ -1,10 +1,9 @@
 package ru.otus.library.repositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
@@ -21,8 +20,8 @@ class CommentRepositoryJpaTest {
     @Autowired
     CommentRepository commentRepository;
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private TestEntityManager em;
 
     @Test
     void mustBeGetAll() {
@@ -65,8 +64,7 @@ class CommentRepositoryJpaTest {
         Optional<Comment> beforeOptional = commentRepository.getCommentById(3);
         assertTrue(beforeOptional.isPresent());
         Comment comment = beforeOptional.get();
-        em.detach(comment);
-        commentRepository.deleteCommentById(3);
+        commentRepository.deleteCommentById(comment);
         Optional<Comment> afterOptional = commentRepository.getCommentById(3);
         assertFalse(afterOptional.isPresent());
     }

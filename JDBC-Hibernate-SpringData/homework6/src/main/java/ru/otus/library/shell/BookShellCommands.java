@@ -32,8 +32,8 @@ public class BookShellCommands {
     @ShellMethod(value = "updateBook", key = "up-b")
     public String updateBook(long id, String title, String publicationDate, long authorId, long genreId) {
         try {
-            boolean result = bookService.updateBook(id, title, LocalDate.parse(publicationDate), authorId, genreId);
-            return String.valueOf(result);
+            bookService.updateBook(id, title, LocalDate.parse(publicationDate), authorId, genreId);
+            return String.format("Book with id %d updated", id);
         } catch (NoSuchElementException e) {
             return "Missing author or genre";
         }
@@ -73,7 +73,11 @@ public class BookShellCommands {
 
     @ShellMethod(value = "deleteBook", key = "del-b")
     public String deleteBookById(long id) {
-        boolean result = bookService.deleteBookById(id);
-        return String.valueOf(result);
+        try {
+            bookService.deleteBookById(id);
+            return String.format("Book with id %d deleted", id);
+        } catch (NoSuchElementException e) {
+            return String.format("Book with id %d does not exist", id);
+        }
     }
 }

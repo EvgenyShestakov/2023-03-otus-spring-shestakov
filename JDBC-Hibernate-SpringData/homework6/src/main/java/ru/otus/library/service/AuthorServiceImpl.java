@@ -25,9 +25,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional
     @Override
-    public boolean updateAuthor(long id, String lastName, String firstName, LocalDate dateOfBirt) {
+    public void updateAuthor(long id, String firstName, String lastName, LocalDate dateOfBirt) {
         Author author = new Author(id, firstName, lastName, dateOfBirt);
-        return authorRepository.updateAuthor(author);
+        authorRepository.updateAuthor(author);
     }
 
     @Transactional(readOnly = true)
@@ -51,7 +51,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional
     @Override
-    public boolean deleteAuthorById(long id) {
-        return authorRepository.deleteAuthorById(id);
+    public void deleteAuthorById(long id) {
+        Author author = authorRepository.getAuthorById(id).orElseThrow();
+        authorRepository.deleteAuthorById(author);
     }
 }

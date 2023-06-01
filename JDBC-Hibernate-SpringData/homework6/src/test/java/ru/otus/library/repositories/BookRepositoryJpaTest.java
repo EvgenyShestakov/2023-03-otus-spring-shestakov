@@ -1,10 +1,9 @@
 package ru.otus.library.repositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
@@ -22,8 +21,8 @@ class BookRepositoryJpaTest {
     @Autowired
     private BookRepository bookRepository;
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private TestEntityManager em;
 
     @Test
     void mustBeGetAll() {
@@ -68,8 +67,7 @@ class BookRepositoryJpaTest {
         Optional<Book> beforeOptional = bookRepository.getBookById(6);
         assertTrue(beforeOptional.isPresent());
         Book it = beforeOptional.get();
-        em.detach(it);
-        bookRepository.deleteBookById(6);
+        bookRepository.deleteBookById(it);
         Optional<Book> afterOptional = bookRepository.getBookById(6);
         assertFalse(afterOptional.isPresent());
     }

@@ -1,10 +1,9 @@
 package ru.otus.library.repositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.library.domain.Author;
 
@@ -20,8 +19,8 @@ class AuthorRepositoryJpaTest {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private TestEntityManager em;
 
     @Test
     void mustBeGetAll() {
@@ -65,8 +64,7 @@ class AuthorRepositoryJpaTest {
         Optional<Author> beforeOptional = authorRepository.getAuthorById(6);
         assertTrue(beforeOptional.isPresent());
         Author author = beforeOptional.get();
-        em.detach(author);
-        authorRepository.deleteAuthorById(6);
+        authorRepository.deleteAuthorById(author);
         Optional<Author> afterOptional = authorRepository.getAuthorById(6);
         assertFalse(afterOptional.isPresent());
     }

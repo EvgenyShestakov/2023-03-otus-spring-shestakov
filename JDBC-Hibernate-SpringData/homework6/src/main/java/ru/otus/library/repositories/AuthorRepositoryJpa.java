@@ -2,7 +2,6 @@ package ru.otus.library.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -29,16 +28,8 @@ public class AuthorRepositoryJpa implements AuthorRepository {
     }
 
     @Override
-    public boolean updateAuthor(Author author) {
-        Query query = em.createQuery("update Author a set a.firstName = :firstName," +
-                " a.lastName = :lastName," +
-                " a.dateOfBirth = :dateOfBirth where a.id = :id");
-        query.setParameter("firstName", author.getFirstName());
-        query.setParameter("lastName", author.getLastName());
-        query.setParameter("dateOfBirth", author.getDateOfBirth());
-        query.setParameter("id", author.getId());
-        int rowsAffected = query.executeUpdate();
-        return rowsAffected > 0;
+    public void updateAuthor(Author author) {
+        em.merge(author);
     }
 
     @Override
@@ -62,10 +53,7 @@ public class AuthorRepositoryJpa implements AuthorRepository {
     }
 
     @Override
-    public boolean deleteAuthorById(long id) {
-        Query query = em.createQuery("delete from Author a where a.id = :id");
-        query.setParameter("id", id);
-        int rowsAffected = query.executeUpdate();
-        return rowsAffected > 0;
+    public void deleteAuthorById(Author author) {
+        em.remove(author);
     }
 }

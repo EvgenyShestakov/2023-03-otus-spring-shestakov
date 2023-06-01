@@ -11,9 +11,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
@@ -30,6 +32,8 @@ public class Comment {
     @Column(name = "body", nullable = false)
     private String body;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;

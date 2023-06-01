@@ -1,10 +1,9 @@
 package ru.otus.library.repositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.library.domain.Genre;
 
@@ -19,8 +18,8 @@ class GenreRepositoryJpaTest {
     @Autowired
     private GenreRepository genreRepository;
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private TestEntityManager em;
 
     @Test
     void mustBeGetAll() {
@@ -63,8 +62,7 @@ class GenreRepositoryJpaTest {
         Optional<Genre> beforeOptional = genreRepository.getGenreById(6);
         assertTrue(beforeOptional.isPresent());
         Genre genre = beforeOptional.get();
-        em.detach(genre);
-        genreRepository.deleteGenreById(6);
+        genreRepository.deleteGenreById(genre);
         Optional<Genre> afterOptional = genreRepository.getGenreById(6);
         assertFalse(afterOptional.isPresent());
     }

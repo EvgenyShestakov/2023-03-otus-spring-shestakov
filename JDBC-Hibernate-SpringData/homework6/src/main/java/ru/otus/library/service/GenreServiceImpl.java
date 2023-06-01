@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.repositories.GenreRepository;
-import ru.otus.library.util.Converter;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +13,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
-
-    private final Converter<Genre> converter;
 
     @Transactional
     @Override
@@ -26,9 +23,9 @@ public class GenreServiceImpl implements GenreService {
 
     @Transactional
     @Override
-    public boolean updateGenre(long id, String genreName) {
+    public void updateGenre(long id, String genreName) {
         Genre genre = new Genre(id, genreName);
-        return genreRepository.updateGenre(genre);
+        genreRepository.updateGenre(genre);
     }
 
     @Transactional(readOnly = true)
@@ -45,7 +42,8 @@ public class GenreServiceImpl implements GenreService {
 
     @Transactional
     @Override
-    public boolean deleteGenreById(long id) {
-        return genreRepository.deleteGenreById(id);
+    public void deleteGenreById(long id) {
+        Genre genre = genreRepository.getGenreById(id).orElseThrow();
+        genreRepository.deleteGenreById(genre);
     }
 }

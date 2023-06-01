@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface AuthorRepository {
     Author saveAuthor(Author author);
 
-    boolean updateAuthor(Author author);
+    void updateAuthor(Author author);
 
     List<Author> getAuthorByName(Author author);
 
@@ -16,6 +16,6 @@ public interface AuthorRepository {
 
     List<Author> getAllAuthors();
 
-    boolean deleteAuthorById(long id);
+    void deleteAuthorById(Author author);
 }
 

@@ -31,8 +31,8 @@ public class CommentShellCommands {
     @ShellMethod(value = "updateComment", key = "up-c")
     public String updateComment(long id, String body, long bookId) {
         try {
-            boolean result = commentService.updateComment(id, body, bookId);
-            return String.valueOf(result);
+            commentService.updateComment(id, body, bookId);
+            return String.format("Comment with id %d updated", id);
         } catch (NoSuchElementException e) {
             return "Missing book";
         }
@@ -61,7 +61,11 @@ public class CommentShellCommands {
 
     @ShellMethod(value = "deleteComment", key = "del-c")
     public String deleteCommentById(long id) {
-        boolean result = commentService.deleteCommentById(id);
-        return String.valueOf(result);
+        try {
+            commentService.deleteCommentById(id);
+            return String.format("Comment with id %d deleted", id);
+        } catch (NoSuchElementException e) {
+            return String.format("Comment with id %d does not exist", id);
+        }
     }
 }
