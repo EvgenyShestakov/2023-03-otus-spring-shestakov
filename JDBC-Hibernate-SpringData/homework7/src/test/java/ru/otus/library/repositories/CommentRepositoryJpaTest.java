@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest
 class CommentRepositoryJpaTest {
     @Autowired
-    CommentRepositoryJpa commentRepositoryJpa;
+    private CommentRepositoryJpa commentRepositoryJpa;
 
     @Test
     void mustFindCommentsOnBook() {
