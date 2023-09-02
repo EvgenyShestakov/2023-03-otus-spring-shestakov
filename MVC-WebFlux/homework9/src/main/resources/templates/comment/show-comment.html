@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Show book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+<h3 th:text="${book.title}">Title of book</h3th:text></h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="comment : ${comments}">
+        <td>
+            <ul>
+                <li th:text="${comment.body}"></li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<form th:action="@{/comments}" method="post" th:object="${comment}">
+    <input type="hidden" name="bookId" th:field="${book.bookId}">
+    <label for="commentBody">Comment:</label>
+    <input type="text" id="commentBody" name="body" th:field="*{body}">
+    <div class="errors" th:if="${#fields.hasErrors('body')}" th:errors="*{body}">Wrong body</div>
+    <button type="submit">Submit Comment</button>
+</form>
+<br>
+<a th:href="@{/books}" title="Go to page index">Go to main page</a>
+</body>
+</html>
