@@ -7,7 +7,6 @@ import ru.otus.library.dto.BookRequestDto;
 import ru.otus.library.dto.CommentRequestDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class MapperDto {

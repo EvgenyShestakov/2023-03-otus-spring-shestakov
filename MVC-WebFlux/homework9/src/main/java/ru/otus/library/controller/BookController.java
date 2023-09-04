@@ -36,7 +36,7 @@ public class BookController {
     public String getAllBooks(Model model) {
         List<Book> books = bookService.getAllBooks();
         model.addAttribute("books", books);
-        return "index";
+        return "book/show-book";
     }
 
     @GetMapping("books/create")
@@ -46,7 +46,7 @@ public class BookController {
         model.addAttribute("book", new BookRequestDto());
         model.addAttribute("authors", authors);
         model.addAttribute("genres", genres);
-    return "book/create";
+        return "book/create";
     }
 
     @PostMapping("books/create")
@@ -60,7 +60,7 @@ public class BookController {
             return "book/create";
         }
         bookService.saveBook(book);
-      return "redirect:/books";
+        return "redirect:/books";
     }
 
     @GetMapping("books/edit/{id}")
@@ -89,9 +89,9 @@ public class BookController {
         return "redirect:/books";
     }
 
-    @PostMapping ("/books/{id}")
+    @PostMapping("/books/{id}")
     public String deleteBook(@PathVariable("id") long id) {
-    bookService.deleteBookById(id);
-    return "redirect:/books";
+        bookService.deleteBookById(id);
+        return "redirect:/books";
     }
 }

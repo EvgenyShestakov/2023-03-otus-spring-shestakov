@@ -4,10 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.library.configuration.TestConfiguration;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Genre;
@@ -29,9 +27,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(BookController.class)
-@ComponentScan(basePackages = "ru.otus.library.controller")
-@ContextConfiguration(classes = TestConfiguration.class)
+@WebMvcTest
+@ContextConfiguration(classes = BookController.class)
 class BookControllerTest {
     @MockBean
     private BookService bookService;
@@ -60,7 +57,7 @@ class BookControllerTest {
         given(bookService.getAllBooks()).willReturn(books);
         mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"))
+                .andExpect(view().name("book/show-book"))
                 .andExpect(model().attributeExists("books"))
                 .andExpect(model().attribute("books", hasSize(2)));
     }
