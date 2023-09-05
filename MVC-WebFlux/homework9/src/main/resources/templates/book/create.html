@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        .errors {
+            color: red;
+        }
+
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]]
+        {
+            background-image: url([[@{/listmark.png}]])
+        ;
+            background-repeat: no-repeat
+        ;
+            padding: 2px
+        ;
+            padding-left: 30px
+        ;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Create book -->
+<h3>Add new book</h3>
+
+<form th:action="@{/books/create}" th:method="post" th:object="${book}">
+    <label for="title">Title:</label>
+    <input type="text" id="title" th:value="*{title}"  th:field="*{title}" name="title">
+    <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong title</div>
+    <br>
+    <div class="row">
+        <label for="genre">Genre:</label>
+        <select id="genre" name="genreId" th:value="*{genreId}">
+            <option th:each="genre : ${genres}" th:text="${genre.genreName}" th:value="${genre.id}"/>
+        </select>
+    </div>
+    <div class="row">
+        <label for="author">Author:</label>
+        <select id="author" name="authorId" th:value="*{authorId}">
+            <option th:each="author : ${authors}" th:text="${author.lastName + ' ' + author.firstName}"
+                    th:value="${author.id}"/>
+        </select>
+    </div>
+    <button type="submit">Add book</button>
+</form>
+<br>
+<a th:href="@{/books}" title="Go to page index">Go to main page</a>
+</body>
+</html>
